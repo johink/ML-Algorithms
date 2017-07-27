@@ -42,7 +42,7 @@ class DecisionTree(object):
             if self.categorical:
                 mask = X[:,self.split_col] == self.split_val 
             else: 
-                X[:,self.split_col] < self.split_val
+                mask = X[:,self.split_col] < self.split_val
             
             #If no left child, we must calculate the class probabilities for everything that is not going right
             if self.left is None:
@@ -221,6 +221,8 @@ class DecisionTree(object):
             #Find the class probabilities for the child trees
             classLeft = np.vectorize(lambda x: (y[mask] == x).sum())(classes)            
             classRight = np.vectorize(lambda x: (y[~mask] == x).sum())(classes)
+            
+            print("{} -- {}".format(classLeft, classRight))
             
             #Create a new node in the tree.  Ultimately returns root
             return self.Node(best_col, best_val, categorical, left, right, depth, classLeft, classRight)
